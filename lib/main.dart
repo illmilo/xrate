@@ -1,12 +1,3 @@
-//ATTENTION!!!!!
-/*
-1. Please refer to lib/constants/global_constants.dart
-2. Refer to lib/widgets to see custom made widgets that were used throughout the app.
-3. Refer to lib/router.dart to see the navigation routes for the app
-4. Refer to lib/providers/user_provider to see app's state manager for the users data
-5. Refer to money_transfer_server to see the nodejs code controlling the backend
-*/
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,7 +22,9 @@ import 'package:money_transfer/features/auth/providers/user_provider.dart';
 import 'package:money_transfer/config/routes/router.dart';
 import 'package:money_transfer/widgets/main_app.dart';
 import 'package:provider/provider.dart';
-// he
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
     print("Handling a background message ${message.messageId}");
@@ -52,116 +45,169 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => ChatProvider(),
-        )
       ],
       child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
-  static const String route = "/my-app";
+class MyApp extends StatelessWidget {
+  static const String route = '/my-app'; // Define the route here
+
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final ThemeManager themeManager = ThemeManager();
-  final AuthService authService = AuthService();
-  final CustomNotifications customNotificatins = CustomNotifications();
-  late Future _future;
-  bool check = true;
-
-  @override
-// Initialize the FlutterLocalNotificationsPlugin instance
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  void initState() {
-    super.initState();
-    _future = obtainTokenAndUserData(context);
-    checkInternetConnection();
-
-    // Request notification permissions and initialize notifications
-    customNotificatins.requestPermission();
-    customNotificatins.initInfo();
-    _initializeNotifications();
-  }
-
-  void _initializeNotifications() async {
-    // Request permission to show notifications (if needed)
-    final bool granted = await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission() ?? false;
-
-    if (granted) {
-      // Set up the notification settings here
-      const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
-      const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    }
-  }
-
-  obtainTokenAndUserData(BuildContext context) async {
-    await authService.obtainTokenAndUserData(context);
-  }
-
-  checkInternetConnection() async {
-    check = await InternetConnectionChecker().hasConnection;
-    return check;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    final user = Provider.of<UserProvider>(context).user;
     return MaterialApp(
-      theme: themeManager.darkTheme,
-      darkTheme: themeManager.darkTheme,
+      theme: ThemeManager().darkTheme,
       debugShowCheckedModeBanner: false,
-      onGenerateRoute: (settings) => appRoutes(settings),
-      home: FutureBuilder(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return check == true
-                ? user.isVerified != false
-                ? user.token.isNotEmpty
-                ? user.pin.isNotEmpty
-                ? const LoginPinScreen()
-                : MainApp(
-              currentPage: 0,
-            )
-                : const OnBoardingScreen()
-                : const LoginScreen()
-                : NoInternetScreen(onTap: () {
-              checkInternetConnection();
-              obtainTokenAndUserData(context);
-              if (check == true) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  MyApp.route,
-                      (route) => false,
-                );
-              } else {
-                showDialogLoader(context);
-                Future.delayed(const Duration(seconds: 5), () {
-                  popNav(context);
-                });
-              }
-            });
-          } else {}
-
-          return const InitializationScreen();
-        },
-      ),
+      home: const BybitRegistrationScreen(), // Directly navigate to the BybitRegistrationScreen
     );
   }
 }
+
+
+class BybitRegistrationScreen extends StatefulWidget {
+  const BybitRegistrationScreen({super.key});
+
+  @override
+  State<BybitRegistrationScreen> createState() => _BybitRegistrationScreenState();
+}
+
+class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> {
+  InAppWebViewController? _controller;
+  String emailInput = "";
+  String passwordInput = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Bybit Registration")),
+      body: Stack(
+        children: [
+          InAppWebView(
+            initialUrlRequest: URLRequest(
+              url: WebUri.uri(Uri.parse("https://www.bybit.com/en/register?redirect_url=https%3A%2F%2Fwww.bybit.com%2Fen%2F")),
+            ),
+            onWebViewCreated: (InAppWebViewController controller) {
+              _controller = controller;
+            },
+            onLoadError: (InAppWebViewController controller, Uri? url, int code, String message) {
+              print("Failed to load URL: $url, Error code: $code, Message: $message");
+            },
+            onLoadStop: (InAppWebViewController controller, Uri? url) async {
+              await _handlePageLoad(controller);
+            },
+          ),
+          // Top overlay
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: MediaQuery.of(context).size.height * 0.15,
+            child: Container(
+              color: Colors.black.withOpacity(0.99),
+              child: const Center(
+                child: Text(
+                  'Overlay Top',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+          // Bottom overlay
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: MediaQuery.of(context).size.height * 0.09,
+            child: Container(
+              color: Colors.black.withOpacity(0.99),
+              child: const Center(
+                child: Text(
+                  'Bybit signup creates an XRate account',
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handlePageLoad(InAppWebViewController controller) async {
+    // Commented out the cookie acceptance part
+    // await _injectClickJavascript(controller, '.style_accpet-cookie-btn__WgSmq');
+
+    emailInput = await _retrieveInputValue(controller, 'input[name="email"]');
+    passwordInput = await _retrieveInputValue(controller, 'input[name="password"]');
+
+    await _waitForTextAndScroll(controller, "Verify");
+    await _handleRedirectAndClickVerify(controller);
+
+    print("Email Input: $emailInput");
+    print("Password Input: $passwordInput");
+  }
+
+  Future<void> _injectClickJavascript(InAppWebViewController controller, String selector) async {
+    await controller.evaluateJavascript(source: '''
+      var button = document.querySelector('$selector');
+      if (button) {
+        button.click();
+      }
+    ''');
+  }
+
+  Future<String> _retrieveInputValue(InAppWebViewController controller, String selector) async {
+    return await controller.evaluateJavascript(source: '''
+      var inputField = document.querySelector('$selector');
+      if (inputField) {
+        inputField.value;
+      } else {
+        null;
+      }
+    ''') ?? "";
+  }
+
+  Future<void> _waitForTextAndScroll(InAppWebViewController controller, String text) async {
+    while (true) {
+      bool exists = await controller.evaluateJavascript(source: '''
+        document.body.innerText.includes('$text');
+      ''');
+
+      if (exists) {
+        await controller.evaluateJavascript(source: '''
+          window.scrollTo(0, document.body.scrollHeight * -0.55);
+        ''');
+
+        break;
+      }
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
+
+  Future<void> _handleRedirectAndClickVerify(InAppWebViewController controller) async {
+    while (true) {
+      bool exists = await controller.evaluateJavascript(source: '''
+        document.body.innerText.includes('Verify');
+      ''');
+
+      if (!exists) {
+        WebUri? currentUrl = await controller.getUrl();
+
+        // Convert Uri to WebUri if necessary
+        if (currentUrl != null && currentUrl.toString() != "https://www.bybit.com/user/accounts/auth/personal") {
+          final webUri = WebUri.uri(Uri.parse(currentUrl.toString())); // Convert to WebUri
+          await controller.loadUrl(urlRequest: URLRequest(url: webUri));
+        } else {
+          await _injectClickJavascript(controller, 'button.moly-btn:contains("Verify Now")');
+        }
+        break;
+      }
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
+}
+
