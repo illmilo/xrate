@@ -7,6 +7,7 @@
 5. Refer to money_transfer_server to see the nodejs code controlling the backend
 */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -32,7 +33,9 @@ import 'package:money_transfer/widgets/main_app.dart';
 import 'package:provider/provider.dart';
 // he
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message ${message.messageId}");
+  if (kDebugMode) {
+    print("Handling a background message ${message.messageId}");
+  }
 }
 
 Future<void> main() async {
