@@ -2,7 +2,7 @@
 
 <img src="assets/images/pay_mobile_advert.png" alt="Pay Mobile" title="Pay Mobile">
 
-# Features (Don't forget to give it a star 🌟)
+# Features (Don't forget to give it a star 🌟
 
 ## You can perform some actions with the <a href="https://github.com/adedayoniyi/Pay-Mobile-Web-Admin"> Pay Mobile Web Admin </a>
 
