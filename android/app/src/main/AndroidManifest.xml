@@ -3,6 +3,10 @@
 
     <!-- Internet Permission -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+
+
 
     <!-- Allows access to the network state -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
