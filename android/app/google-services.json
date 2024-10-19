@@ -26,6 +26,25 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:337987828333:android:d13a1462e8a127d112dd64",
+        "android_client_info": {
+          "package_name": "com.example.money_transfer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnO7R1ltSgL5D4cRl1VHbie1ZPCwCCKA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:337987828333:android:9a6861ba68097b9112dd64",
         "android_client_info": {
           "package_name": "com.ezekiel.peertopeermoneytransferapp"
