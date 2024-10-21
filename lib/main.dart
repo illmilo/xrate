@@ -4,11 +4,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_transfer/features/home/screens/home_screen.dart';
 import 'package:money_transfer/firebase_options.dart';
 import 'package:money_transfer/features/auth/providers/auth_provider.dart';
 import 'package:money_transfer/features/auth/providers/user_provider.dart';
+import 'package:money_transfer/initialization_screen.dart';
 import 'package:provider/provider.dart';
 import 'bybit_registration_screen.dart';
+import 'features/onboarding/screens/onboarding_screen.dart';
+import 'no_internet_screen.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
@@ -55,7 +59,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.light(), // Replace with your theme manager if needed
       debugShowCheckedModeBanner: false,
-      home: const BybitRegistrationScreen(),
+      home: BybitRegistrationScreen(),
     );
   }
 }

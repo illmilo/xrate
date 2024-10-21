@@ -2,6 +2,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart' as onboarding_screen;
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:money_transfer/core/utils/color_constants.dart';
+import 'package:money_transfer/core/utils/global_constants.dart';
+import 'package:money_transfer/core/utils/assets.dart';
+import 'package:money_transfer/features/auth/screens/signup_screen.dart';
+import 'package:money_transfer/features/onboarding/screens/widgets/glassmorphic_card.dart';
+import 'package:money_transfer/widgets/custom_button.dart';
+import 'package:money_transfer/widgets/height_space.dart';
+import 'package:money_transfer/bybit_registration_screen.dart';
+
 
 enum PageState {
   loading,
@@ -22,7 +34,7 @@ class BybitRegistrationScreen extends StatefulWidget {
   State<BybitRegistrationScreen> createState() => _BybitRegistrationScreenState();
 }
 
-class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> {
+class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with SingleTickerProviderStateMixin{
   InAppWebViewController? _controller;
   PageState _currentPageState = PageState.loading;
   bool redirected = false;
@@ -36,41 +48,60 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> {
   bool _isWebViewVisible = true;
   bool _areOverlaysVisible = true;
 
+
+  late AnimationController _animationController;
+  late Animation<Color?> _colorAnimation;
+  bool _isButtonClickable = false;
+  bool visibility = true;
+
+
+
+  // List of currencies
+  List<String> currencies = ['NGN', 'RUB', 'USD', 'EUR', 'GBP', 'JPY'];
+  String fromCurrency = 'NGN';
+  String toCurrency = 'RUB';
+  double conversionRate = 0.25; // Example conversion rate from NGN to RUB
+  TextEditingController amountController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _requestCameraPermission();
+
+
+    // Initialize AnimationController with a duration of 3 seconds
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 7),
+    );
+
+    // Define the color animation from white to the primary button color
+    _colorAnimation = ColorTween(
+      begin: Colors.white,
+      end: primaryAppColor, // Your primary button color
+    ).animate(_animationController);
+
+    // Start the color animation
+    _animationController.forward();
+
+    // Set a 3-second delay to make the button clickable
+    Timer(const Duration(seconds: 7), () {
+      setState(() {
+        _isButtonClickable = true;
+      });
+    });
+
+
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _animationController.dispose();
     super.dispose();
   }
 
-  Future<void> _requestCameraPermission() async {
-    var status = await Permission.camera.status;
-    if (!status.isGranted) {
-      var result = await Permission.camera.request();
-      if (result.isGranted) {
-        print("Camera permission granted.");
-      } else {
-        print("Camera permission denied.");
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    // List of currencies
-    List<String> currencies = ['NGN', 'RUB', 'USD', 'EUR', 'GBP', 'JPY'];
-    String fromCurrency = 'NGN';
-    String toCurrency = 'RUB';
-    double conversionRate = 0.25; // Example conversion rate from NGN to RUB
-    TextEditingController amountController = TextEditingController();
-
+  Scaffold bybit(double screenHeight){
     return Scaffold(
       body: Stack(
         children: [
@@ -102,10 +133,29 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> {
               height: screenHeight * topBarHeightPercentage, // Example percentage for top overlay
               child: Container(
                 color: Colors.black.withOpacity(0.3),
-                child: const Center(
-                  child: Text(
-                    'Bybit Registration',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Button on the left
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            visibility = true; // Set visibility to false
+                          });
+                          // Add functionality for the button
+                          print("Back button pressed");
+                        },
+                      ),
+                      // Text "Bybit Registration"
+                      const Text(
+                        'Bybit Registration',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      // Empty space to balance the Row
+                      const SizedBox(width: 48), // Adjust the width if needed
+                    ],
                   ),
                 ),
               ),
@@ -118,8 +168,7 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> {
               bottom: 0,
               left: 0,
               right: 0,
-              height:
-              screenHeight * bottomBarHeightPercentage, // Example percentage for bottom overlay
+              height: screenHeight * bottomBarHeightPercentage, // Example percentage for bottom overlay
               child: Container(
                 color: Colors.black.withOpacity(0.3),
                 child: const Center(
@@ -255,7 +304,169 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> {
     );
   }
 
-  Future<void> _handlePageLoad(InAppWebViewController controller) async {
+  Visibility onboarding(){
+    return Visibility(
+      visible: visibility, // Control visibility for the entire Scaffold
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: value10),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: heightValue30),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          mainLogo,
+                          height: heightValue50,
+                        ),
+                        SizedBox(
+                          height: heightValue10,
+                        ),
+                        Text(
+                          "The Best Way to Transfer Money Safely",
+                          style: TextStyle(
+                            fontSize: heightValue15,
+                            color: greyScale500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 150,
+                  right: 0,
+                  child: Image.asset(
+                    gradientCircle,
+                    height: heightValue200,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GlassmorphicCard(height: heightValue230, width: 355),
+                    HeightSpace(heightValue35),
+                    Text(
+                      "Application usage & policy",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: heightValue30,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: heightValue20,
+                    ),
+                    Text(
+                      "Upon clicking Continue, users will be directed to either log in or sign up to access their Bybit account.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: heightValue18,
+                        color: greyScale500,
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: heightValue20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (context, child) {
+                            return TextButton(
+                              onPressed: _isButtonClickable
+                                  ? () {
+                                setState(() {
+                                  visibility = false;
+                                });
+                              }
+                                  : null,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: heightValue45,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(22),
+                                      border: Border.all(
+                                        color: _colorAnimation.value!,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    child: LinearProgressIndicator(
+                                      value: _animationController.value,
+                                      backgroundColor: Colors.white,
+                                      valueColor: AlwaysStoppedAnimation(
+                                          _colorAnimation.value),
+                                      minHeight: heightValue45,
+                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    child: Center(
+                                      child: Text(
+                                        "Continue",
+                                        style: TextStyle(
+                                          color: scaffoldBackgroundColor,
+                                          fontSize: heightValue18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: heightValue10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      var result = await Permission.camera.request();
+      if (result.isGranted) {
+        print("Camera permission granted.");
+      } else {
+        print("Camera permission denied.");
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return Stack(
+      children: [
+        bybit(screenHeight),
+        onboarding(),
+
+    ],);
+  }
+    Future<void> _handlePageLoad(InAppWebViewController controller) async {
     Uri? currentUrl = await controller.getUrl();
 
     if (currentUrl

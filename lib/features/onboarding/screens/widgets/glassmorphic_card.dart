@@ -58,7 +58,7 @@ class GlassmorphicCard extends StatelessWidget {
               left: 95,
               right: 0,
               child: Text(
-                "1234 5678 9000",
+                "Simple and seamless international transactions like never before",
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,

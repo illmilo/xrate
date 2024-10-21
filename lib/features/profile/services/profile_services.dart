@@ -25,11 +25,11 @@ class ProfileServices {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       await sharedPreferences.setString('x-auth-token', '');
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        OnBoardingScreen.route,
-        (route) => false,
-      );
+      // Navigator.pushNamedAndRemoveUntil(
+      //   context,
+      //   OnBoardingScreen.route,
+      //   (route) => false,
+      // );
     } catch (e) {
       showSnackBar(context, e.toString());
     }

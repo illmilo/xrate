@@ -66,11 +66,11 @@ Route<dynamic> appRoutes(RouteSettings routeSettings) {
         pageBuilder: (_, __, ___) => const HomeScreen(),
         settings: routeSettings,
       );
-    case OnBoardingScreen.route:
-      return PageFadeTransition(
-        pageBuilder: (_, __, ___) => const OnBoardingScreen(),
-        settings: routeSettings,
-      );
+    // case OnBoardingScreen.route:
+    //   return PageFadeTransition(
+    //     pageBuilder: (_, __, ___) => const OnBoardingScreen(),
+    //     settings: routeSettings,
+    //   );
     case TransactionsScreen.route:
       return PageFadeTransition(
         pageBuilder: (_, __, ___) => const TransactionsScreen(),
