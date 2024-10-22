@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:money_transfer/privacy_policy_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart' as onboarding_screen;
 import 'dart:async';
@@ -28,6 +30,7 @@ enum PageState {
 }
 
 class BybitRegistrationScreen extends StatefulWidget {
+  static const route = '/bybit-registration';
   const BybitRegistrationScreen({Key? key}) : super(key: key);
 
   @override
@@ -44,7 +47,7 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
   bool isVerified = false;
   Timer? _timer;
   double topBarHeightPercentage = 0.14;
-  double bottomBarHeightPercentage = 0.135;
+  double bottomBarHeightPercentage = 0.145;
   bool _isWebViewVisible = true;
   bool _areOverlaysVisible = true;
 
@@ -132,29 +135,41 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
               right: 0,
               height: screenHeight * topBarHeightPercentage, // Example percentage for top overlay
               child: Container(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.white,
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Button on the left
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        icon: const Icon(Icons.arrow_back, color: Colors.black),
                         onPressed: () {
                           setState(() {
-                            visibility = true; // Set visibility to false
+                            visibility = true; // Set visibility to true
                           });
                           // Add functionality for the button
                           print("Back button pressed");
                         },
                       ),
                       // Text "Bybit Registration"
-                      const Text(
-                        'Bybit Registration',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      const Expanded(
+                        child: Text(
+                          'Bybit Registration',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,  // You can keep bold
+                          ),
+                          textAlign: TextAlign.center,  // Center the text
+                        ),
                       ),
-                      // Empty space to balance the Row
-                      const SizedBox(width: 48), // Adjust the width if needed
+                      // Logo on the right
+                      Image.asset(
+                        mainLogo, // Path to the logo
+                        width: 95,
+                        height: 80,
+                        fit: BoxFit.contain,
+                      ),
                     ],
                   ),
                 ),
@@ -164,25 +179,67 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
 
           Visibility(
             visible: _areOverlaysVisible,
-            child: Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: screenHeight * bottomBarHeightPercentage, // Example percentage for bottom overlay
-              child: Container(
-                color: Colors.black.withOpacity(0.3),
-                child: const Center(
-                  child: Text(
-                    'Bybit signup creates an XRate account',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: screenHeight * bottomBarHeightPercentage, // Bottom overlay background
+                  child: Container(
+                    color: Colors.white,
                   ),
                 ),
-              ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: screenHeight * (bottomBarHeightPercentage - 0.02), // Content area
+                  child: Container(
+                    color: Colors.black.withOpacity(0.9),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Left padding to push text left
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Second line with "Privacy Policy" link inline using RichText
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14, // Smaller font size for this text
+                                fontWeight: FontWeight.normal,
+                              ),
+                              children: [
+                                const TextSpan(
+                                  text:
+                                  'By signing up for Bybit, you automatically create an X-Rate account as well. You may review our policy. ', // Regular text
+                                ),
+                                TextSpan(
+                                  text: 'Privacy Policy',
+                                  style: const TextStyle(
+                                    color: Colors.purple, // Make link purple
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline, // Underline the link
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        PrivacyPolicyScreen.route, // Route to privacy policy
+                                      );
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -463,10 +520,10 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
       children: [
         bybit(screenHeight),
         onboarding(),
-
-    ],);
+      ],);
   }
-    Future<void> _handlePageLoad(InAppWebViewController controller) async {
+
+  Future<void> _handlePageLoad(InAppWebViewController controller) async {
     Uri? currentUrl = await controller.getUrl();
 
     if (currentUrl

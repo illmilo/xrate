@@ -19,6 +19,7 @@ import 'package:money_transfer/features/transactions/screens/all_transactions_sc
 import 'package:money_transfer/features/transactions/screens/transaction_details_screen.dart';
 import 'package:money_transfer/main.dart';
 import 'package:money_transfer/features/transactions/models/transactions.dart';
+import 'package:money_transfer/privacy_policy_screen.dart';
 import 'package:money_transfer/widgets/main_app.dart';
 
 Route<dynamic> appRoutes(RouteSettings routeSettings) {
@@ -116,6 +117,11 @@ Route<dynamic> appRoutes(RouteSettings routeSettings) {
     case ForgortPinVerificationScreen.route:
       return PageSlideTransition(
         pageBuilder: (_, __, ___) => const ForgortPinVerificationScreen(),
+        settings: routeSettings,
+      );
+    case PrivacyPolicyScreen.route:
+      return PageSlideTransition(
+        pageBuilder: (_, __, ___) => const PrivacyPolicyScreen(),
         settings: routeSettings,
       );
     default:

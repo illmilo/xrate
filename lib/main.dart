@@ -9,6 +9,7 @@ import 'package:money_transfer/firebase_options.dart';
 import 'package:money_transfer/features/auth/providers/auth_provider.dart';
 import 'package:money_transfer/features/auth/providers/user_provider.dart';
 import 'package:money_transfer/initialization_screen.dart';
+import 'package:money_transfer/privacy_policy_screen.dart';
 import 'package:provider/provider.dart';
 import 'bybit_registration_screen.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
@@ -59,7 +60,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.light(), // Replace with your theme manager if needed
       debugShowCheckedModeBanner: false,
-      home: BybitRegistrationScreen(),
+      routes: {
+        BybitRegistrationScreen.route: (context) => const BybitRegistrationScreen(),
+        PrivacyPolicyScreen.route: (context) => const PrivacyPolicyScreen(),
+        // we can add other routes as needed
+      },
+      initialRoute: BybitRegistrationScreen.route, // Set the initial route
     );
   }
 }
