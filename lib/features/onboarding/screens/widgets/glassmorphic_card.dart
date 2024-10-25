@@ -55,12 +55,12 @@ class GlassmorphicCard extends StatelessWidget {
             const Positioned(
               top: 100,
               bottom: 0,
-              left: 95,
-              right: 0,
+              left: 25,
+              right: 85,
               child: Text(
-                "Simple and seamless international transactions like never before",
+                "Seamless cross-border transactions—empowered by cryptocurrency.",
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),

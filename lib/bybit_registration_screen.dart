@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:money_transfer/privacy_policy_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart' as onboarding_screen;
+import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart'
+    as onboarding_screen;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:money_transfer/core/utils/color_constants.dart';
@@ -15,7 +16,6 @@ import 'package:money_transfer/features/onboarding/screens/widgets/glassmorphic_
 import 'package:money_transfer/widgets/custom_button.dart';
 import 'package:money_transfer/widgets/height_space.dart';
 import 'package:money_transfer/bybit_registration_screen.dart';
-
 
 enum PageState {
   loading,
@@ -34,10 +34,12 @@ class BybitRegistrationScreen extends StatefulWidget {
   const BybitRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<BybitRegistrationScreen> createState() => _BybitRegistrationScreenState();
+  State<BybitRegistrationScreen> createState() =>
+      _BybitRegistrationScreenState();
 }
 
-class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with SingleTickerProviderStateMixin{
+class _BybitRegistrationScreenState extends State<BybitRegistrationScreen>
+    with SingleTickerProviderStateMixin {
   InAppWebViewController? _controller;
   PageState _currentPageState = PageState.loading;
   bool redirected = false;
@@ -51,13 +53,10 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
   bool _isWebViewVisible = true;
   bool _areOverlaysVisible = true;
 
-
   late AnimationController _animationController;
   late Animation<Color?> _colorAnimation;
   bool _isButtonClickable = false;
   bool visibility = true;
-
-
 
   // List of currencies
   List<String> currencies = ['NGN', 'RUB', 'USD', 'EUR', 'GBP', 'JPY'];
@@ -70,7 +69,6 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
   void initState() {
     super.initState();
     _requestCameraPermission();
-
 
     // Initialize AnimationController with a duration of 3 seconds
     _animationController = AnimationController(
@@ -93,8 +91,6 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
         _isButtonClickable = true;
       });
     });
-
-
   }
 
   @override
@@ -104,7 +100,7 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
     super.dispose();
   }
 
-  Scaffold bybit(double screenHeight){
+  Scaffold bybit(double screenHeight) {
     return Scaffold(
       body: Stack(
         children: [
@@ -133,7 +129,8 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
               top: 0,
               left: 0,
               right: 0,
-              height: screenHeight * topBarHeightPercentage, // Example percentage for top overlay
+              height: screenHeight *
+                  topBarHeightPercentage, // Example percentage for top overlay
               child: Container(
                 color: Colors.white,
                 child: Center(
@@ -158,9 +155,9 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,  // You can keep bold
+                            fontWeight: FontWeight.bold, // You can keep bold
                           ),
-                          textAlign: TextAlign.center,  // Center the text
+                          textAlign: TextAlign.center, // Center the text
                         ),
                       ),
                       // Logo on the right
@@ -185,7 +182,8 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: screenHeight * bottomBarHeightPercentage, // Bottom overlay background
+                  height: screenHeight *
+                      bottomBarHeightPercentage, // Bottom overlay background
                   child: Container(
                     color: Colors.white,
                   ),
@@ -194,13 +192,16 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: screenHeight * (bottomBarHeightPercentage - 0.02), // Content area
+                  height: screenHeight *
+                      (bottomBarHeightPercentage - 0.02), // Content area
                   child: Container(
                     color: Colors.black.withOpacity(0.9),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Left padding to push text left
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0), // Left padding to push text left
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Align text to the left
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Second line with "Privacy Policy" link inline using RichText
@@ -214,20 +215,22 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
                               children: [
                                 const TextSpan(
                                   text:
-                                  'By signing up for Bybit, you automatically create an X-Rate account as well. You may review our policy. ', // Regular text
+                                      'By completing your registration with Bybit, you consent to the automatic creation of an X-Rate account. You may refer to our policy for further details. ', // Regular text
                                 ),
                                 TextSpan(
                                   text: 'Privacy Policy',
                                   style: const TextStyle(
                                     color: Colors.purple, // Make link purple
                                     fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline, // Underline the link
+                                    decoration: TextDecoration
+                                        .underline, // Underline the link
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.pushNamed(
                                         context,
-                                        PrivacyPolicyScreen.route, // Route to privacy policy
+                                        PrivacyPolicyScreen
+                                            .route, // Route to privacy policy
                                       );
                                     },
                                 ),
@@ -361,7 +364,7 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
     );
   }
 
-  Visibility onboarding(){
+  Visibility onboarding() {
     return Visibility(
       visible: visibility, // Control visibility for the entire Scaffold
       child: Scaffold(
@@ -377,14 +380,16 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
                     child: Column(
                       children: [
                         Image.asset(
-                          mainLogo,
-                          height: heightValue50,
+                          mainLogo, // Path to the logo
+                          width: 95,
+                          height: 80,
+                          fit: BoxFit.contain,
                         ),
                         SizedBox(
                           height: heightValue10,
                         ),
                         Text(
-                          "The Best Way to Transfer Money Safely",
+                          "Your Bridge to Borderless Transactions.",
                           style: TextStyle(
                             fontSize: heightValue15,
                             color: greyScale500,
@@ -402,93 +407,96 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
                     height: heightValue200,
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GlassmorphicCard(height: heightValue230, width: 355),
-                    HeightSpace(heightValue35),
-                    Text(
-                      "Application usage & policy",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: heightValue30,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: heightValue20,
-                    ),
-                    Text(
-                      "Upon clicking Continue, users will be directed to either log in or sign up to access their Bybit account.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: heightValue18,
-                        color: greyScale500,
-                      ),
-                    ),
-                  ],
+                Positioned(
+                  top: MediaQuery.of(context).size.height *
+                      0.25, // Adjust this value to position higher
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      GlassmorphicCard(height: heightValue230, width: 355),
+                      HeightSpace(heightValue35),
+                    ],
+                  ),
                 ),
+                // Bottom Positioned policy text and Continue button
+                Positioned(
+                  bottom: heightValue20 *
+                      5.5, // Adjust if needed for spacing above the button
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: heightValue20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: value10), // Adjust padding as needed
+                        child: Text(
+                          "Upon clicking Continue, you will be directed to either log in or sign up to access their Bybit account.",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: heightValue18,
+                            color: greyScale500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Bottom Positioned Continue button
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: EdgeInsets.only(bottom: heightValue20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        AnimatedBuilder(
-                          animation: _animationController,
-                          builder: (context, child) {
-                            return TextButton(
-                              onPressed: _isButtonClickable
-                                  ? () {
-                                setState(() {
-                                  visibility = false;
-                                });
-                              }
-                                  : null,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    height: heightValue45,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(22),
-                                      border: Border.all(
-                                        color: _colorAnimation.value!,
-                                      ),
-                                    ),
+                    child: AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context, child) {
+                        return TextButton(
+                          onPressed: _isButtonClickable
+                              ? () {
+                                  setState(() {
+                                    visibility = false;
+                                  });
+                                }
+                              : null,
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: heightValue45,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(22),
+                                  border: Border.all(
+                                    color: _colorAnimation.value!,
                                   ),
-                                  Positioned.fill(
-                                    child: LinearProgressIndicator(
-                                      value: _animationController.value,
-                                      backgroundColor: Colors.white,
-                                      valueColor: AlwaysStoppedAnimation(
-                                          _colorAnimation.value),
-                                      minHeight: heightValue45,
-                                    ),
-                                  ),
-                                  Positioned.fill(
-                                    child: Center(
-                                      child: Text(
-                                        "Continue",
-                                        style: TextStyle(
-                                          color: scaffoldBackgroundColor,
-                                          fontSize: heightValue18,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          height: heightValue10,
-                        ),
-                      ],
+                              Positioned.fill(
+                                child: LinearProgressIndicator(
+                                  value: _animationController.value,
+                                  backgroundColor: Colors.white,
+                                  valueColor: AlwaysStoppedAnimation(
+                                      _colorAnimation.value),
+                                  minHeight: heightValue45,
+                                ),
+                              ),
+                              Positioned.fill(
+                                child: Center(
+                                  child: Text(
+                                    "Continue",
+                                    style: TextStyle(
+                                      color: scaffoldBackgroundColor,
+                                      fontSize: heightValue18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -520,7 +528,8 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
       children: [
         bybit(screenHeight),
         onboarding(),
-      ],);
+      ],
+    );
   }
 
   Future<void> _handlePageLoad(InAppWebViewController controller) async {
@@ -539,20 +548,21 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
       });
       String xpath =
           "//*[@id='root']/div[2]/div/div[2]/section/main/div/div/div[1]/div/div[3]/div[5]/div/div/div[4]/button";
-      if(!await _clickVerifyNowButton(controller, xpath)){
+      if (!await _clickVerifyNowButton(controller, xpath)) {
         await _clickCancelButtonInAllPopups(controller);
         await Future.delayed(
             const Duration(seconds: 4)); // Delay before each attempt
         await _fundPassword(controller);
       }
-
     } else if (currentUrl.toString().contains('user/accounts/auth/personal')) {
       setState(() {
         _currentPageState = PageState.authPersonal;
       });
       String xpath = "//*[@id='root']/div/div[2]/div[2]/div[1]/div[1]/button";
       _clickVerifyNowButton(controller, xpath);
-    } else if (currentUrl.toString().contains('download') || currentUrl.toString().contains('dashboard')) { // download/?newUser=true
+    } else if (currentUrl.toString().contains('download') ||
+        currentUrl.toString().contains('dashboard')) {
+      // download/?newUser=true
       setState(() {
         _currentPageState = PageState.dashboardDownload;
       });
@@ -621,7 +631,7 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen> with 
       print("Failed to click the settings button after $retryCount retries.");
       setState(() {
         _isWebViewVisible =
-        false; // Hide the WebView instead of adjusting bar height
+            false; // Hide the WebView instead of adjusting bar height
         _areOverlaysVisible = false;
         print("Hiding WebView and showing app UI.");
       });
