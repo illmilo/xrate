@@ -9,11 +9,11 @@ class SendersMessageCard extends StatelessWidget {
   final String user;
 
   const SendersMessageCard({
-    Key? key,
+    super.key,
     required this.message,
     required this.dateTime,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

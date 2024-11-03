@@ -10,14 +10,14 @@ class CustomButton extends StatelessWidget {
   final double borderRadius;
   final Color? borderSideColor;
   const CustomButton({
-    Key? key,
+    super.key,
     required this.buttonText,
     this.buttonColor = primaryAppColor,
     required this.buttonTextColor,
     required this.onTap,
     this.borderRadius = 10,
     this.borderSideColor = transparentColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +25,16 @@ class CustomButton extends StatelessWidget {
       onPressed: onTap,
       style: ButtonStyle(
           splashFactory: InkSplash.splashFactory,
-          overlayColor: MaterialStatePropertyAll(
+          overlayColor: WidgetStatePropertyAll(
             whiteColor.withOpacity(0.2),
           ),
-          backgroundColor: MaterialStatePropertyAll(
+          backgroundColor: WidgetStatePropertyAll(
             buttonColor,
           ),
-          fixedSize: MaterialStatePropertyAll(
+          fixedSize: WidgetStatePropertyAll(
             Size(screenWidth, heightValue60),
           ),
-          shape: MaterialStatePropertyAll(
+          shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               side: BorderSide(

@@ -13,9 +13,9 @@ class TransactionDetailsScreen extends StatelessWidget {
   static const String route = "/transaction-details";
   final Transactions transactions;
   const TransactionDetailsScreen({
-    Key? key,
+    super.key,
     required this.transactions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

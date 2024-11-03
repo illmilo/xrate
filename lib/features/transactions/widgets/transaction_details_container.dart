@@ -10,13 +10,13 @@ class TransactionDetailsContainer extends StatelessWidget {
   final bool isRow;
   final bool isAmount;
   const TransactionDetailsContainer({
-    Key? key,
+    super.key,
     required this.label,
     required this.content,
     this.amountColor = defaultAppColor,
     this.isRow = false,
     this.isAmount = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

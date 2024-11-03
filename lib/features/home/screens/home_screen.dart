@@ -21,6 +21,8 @@ import 'package:money_transfer/features/auth/providers/user_provider.dart';
 import 'package:money_transfer/widgets/circular_loader.dart';
 import 'package:money_transfer/widgets/custom_button.dart';
 
+import 'chart.dart';
+
 class HomeScreen extends StatefulWidget {
   static const String route = '/home-screens';
   const HomeScreen({super.key});
@@ -30,27 +32,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeService homeService = HomeService();
+  final HomeService homeService = HomeService();  // device notifications
   final AuthService authService = AuthService();
   int? balance = 0;
   String naira = '';
   List<Transactions> transactions = [];
   late Future _future;
   final ScrollController scrollController = ScrollController();
-
-  getUserBalance() async {
-    getCreditNotifications();
-    getAllTransactions();
-    final user = Provider.of<UserProvider>(context, listen: false).user;
-    balance = await homeService.getUserBalance(
-      context: context,
-      username: user.username,
-    );
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
 
   getAllTransactions() async {
     transactions = await homeService.getAllTransactions(
@@ -88,8 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    getUserBalance();
-    checkIfUserHasPin();
+    // checkIfUserHasPin();
     obtainTokenAndUserData();
     _future = getAllTransactions();
     Future.delayed(const Duration(seconds: 5), () {
@@ -120,6 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
     "More",
   ];
 
+  double exchangeRate = 1644.39;
+  String cur1 = '🇺🇸 USD';
+  String cur2 = "🇳🇬 NGN";
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
@@ -130,9 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.symmetric(horizontal: value20),
           child: Column(
             children: [
-              RefreshIndicator(
-                displacement: 80,
-                onRefresh: () => getUserBalance(),
+              Center(
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Column(
@@ -156,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Center(
                                         child: Text(
                                       user.fullname[0],
+                                          // 'Test',
                                       style: TextStyle(
                                           color: secondaryAppColor,
                                           fontSize: heightValue25,
@@ -199,29 +189,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: heightValue10,
                           ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Total Balance",
-                                  style: TextStyle(
-                                    color: greyScale400,
-                                    fontSize: heightValue20,
-                                  ),
-                                ),
-                                Text(
-                                  "₦ ${amountFormatter.format(balance)}",
-                                  style: TextStyle(
-                                    color: whiteColor,
-                                    fontSize: heightValue50,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                          // graph here
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              // first dropdown
+                              ElevatedButton(
+                                onPressed: (){},
+                                child: Text(cur1, style: TextStyle(fontSize: 18)),
+                              ),
+                              ElevatedButton(onPressed: (){},
+                                  child: Text('⇌', style: TextStyle(fontSize: 20))),
+                              ElevatedButton(onPressed: (){}, child: Text(cur2, style: TextStyle(fontSize: 18)))
+                            ],
+                          ),
+                          Text(
+                            '1 $cur1 = ${exchangeRate.toStringAsFixed(2)} $cur2',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
+                          Center(child: LineChartSample()),
                         ],
                       ),
                       HeightSpace(heightValue10),
@@ -229,14 +220,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           AddSendFundsContainers(
-                            text: "Add",
-                            icon: addIcon,
-                            onTap: () => namedNav(context, "/add-money"),
-                          ),
-                          AddSendFundsContainers(
                             text: "Send",
                             icon: sendIcon,
                             onTap: () => namedNav(context, "/send-money"),
+                          ),
+                          AddSendFundsContainers(
+                            text: "Alert",
+                            icon: addIcon,
+                            onTap: () => namedNav(context, "/add-money"),
                           ),
                         ],
                       ),

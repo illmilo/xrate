@@ -56,7 +56,7 @@ class CurrencyListView extends StatefulWidget {
   final CurrencyPickerThemeData? theme;
 
   const CurrencyListView({
-    Key? key,
+    super.key,
     required this.onSelect,
     this.favorite,
     this.currencyFilter,
@@ -68,7 +68,7 @@ class CurrencyListView extends StatefulWidget {
     this.physics,
     this.controller,
     this.theme,
-  }) : super(key: key);
+  });
 
   @override
   _CurrencyListViewState createState() => _CurrencyListViewState();

@@ -60,11 +60,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.light(), // Replace with your theme manager if needed
       debugShowCheckedModeBanner: false,
+      // home: HomeScreen(),
       routes: {
+        HomeScreen.route: (context) => const HomeScreen(),
         BybitRegistrationScreen.route: (context) => const BybitRegistrationScreen(),
         PrivacyPolicyScreen.route: (context) => const PrivacyPolicyScreen(),
         // we can add other routes as needed
       },
+      // initialRoute: HomeScreen.route,
       initialRoute: BybitRegistrationScreen.route, // Set the initial route
     );
   }

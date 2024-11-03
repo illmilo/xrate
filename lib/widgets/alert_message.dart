@@ -12,13 +12,13 @@ class AlertMessage extends StatelessWidget {
   final String alertImage;
   final Color buttonColor;
   const AlertMessage({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     required this.onTap,
     this.alertImage = "assets/images/dialog_success_image.png",
     this.buttonColor = defaultAppColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

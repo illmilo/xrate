@@ -7,10 +7,10 @@ class NumberDialPad extends StatelessWidget {
   final VoidCallback onTap;
   final String numberText;
   const NumberDialPad({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.numberText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

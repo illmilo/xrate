@@ -12,7 +12,6 @@ import 'package:money_transfer/features/home/screens/comming_soon_screen.dart';
 import 'package:money_transfer/features/home/screens/fund_wallet_screen.dart';
 import 'package:money_transfer/features/home/screens/home_screen.dart';
 import 'package:money_transfer/features/home/screens/send_money_screen.dart';
-import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart';
 import 'package:money_transfer/features/profile/screens/change_pin_screen.dart';
 import 'package:money_transfer/features/profile/screens/chat_screen.dart';
 import 'package:money_transfer/features/transactions/screens/all_transactions_screen.dart';

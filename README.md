@@ -82,26 +82,28 @@ flutter pub get
 #### Here are some test login details of verified users if you don't want to create an account
 
 ```json
-{
-"username":"lere",
-"pin":"7171",
-"password":"test123",
-}
-{
-"username":"johndoe",
-"pin":"7171",
-"password":"test123",
-}
-{
-"username":"alice",
-"pin":"7070",
-"password":"test123",
-}
-{
-"username":"bob",
-"pin":"7474",
-"password":"test123",
-}
+[
+  {
+  "username":"lere",
+  "pin":"7171",
+  "password":"test123"
+  },
+  {
+    "username":"johndoe",
+    "pin":"7171",
+    "password":"test123"
+  },
+  {
+    "username":"alice",
+    "pin":"7070",
+    "password":"test123"
+  },
+  {
+    "username":"bob",
+    "pin":"7474",
+    "password":"test123"
+  }
+]
 ```
 
 ### If you choose to run it on your own server, visit the Pay Mobile Server Repo

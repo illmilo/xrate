@@ -6,10 +6,10 @@ class OtpCodeInputField extends StatefulWidget {
   final TextEditingController controller;
   final Color fillColor;
   const OtpCodeInputField({
-    Key? key,
+    super.key,
     required this.controller,
     this.fillColor = greyScale850,
-  }) : super(key: key);
+  });
 
   @override
   State<OtpCodeInputField> createState() => _OtpCodeInputFieldState();

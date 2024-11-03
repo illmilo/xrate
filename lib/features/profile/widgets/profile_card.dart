@@ -9,12 +9,12 @@ class ProfileCard extends StatelessWidget {
   final String profileOperationDescription;
   final VoidCallback onPressed;
   const ProfileCard({
-    Key? key,
+    super.key,
     required this.iconImage,
     required this.profileOperation,
     required this.profileOperationDescription,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

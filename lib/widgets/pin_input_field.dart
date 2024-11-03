@@ -9,11 +9,11 @@ class PinInputField extends StatelessWidget {
   final String pin;
 
   const PinInputField({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.index,
     required this.pin,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

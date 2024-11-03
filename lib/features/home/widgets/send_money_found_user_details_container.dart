@@ -8,11 +8,11 @@ class SendMoneyFoundUserDetailsContainer extends StatelessWidget {
   final String userFullName;
   final String userName;
   const SendMoneyFoundUserDetailsContainer({
-    Key? key,
+    super.key,
     required this.circleAvatarText,
     required this.userFullName,
     required this.userName,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

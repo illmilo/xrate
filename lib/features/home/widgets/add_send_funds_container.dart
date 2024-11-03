@@ -7,11 +7,11 @@ class AddSendFundsContainers extends StatelessWidget {
   final String icon;
   final VoidCallback onTap;
   const AddSendFundsContainers({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -12,9 +12,9 @@ class MainApp extends StatefulWidget {
   static const String route = '/main-app';
   int currentPage;
   MainApp({
-    Key? key,
+    super.key,
     this.currentPage = 0,
-  }) : super(key: key);
+  });
 
   @override
   State<MainApp> createState() => _MainAppState();

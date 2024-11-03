@@ -12,13 +12,13 @@ class TransactionsCard extends StatelessWidget {
   final int amount;
   final Color amountColorBasedOnTransactionType;
   const TransactionsCard({
-    Key? key,
+    super.key,
     required this.transactionTypeImage,
     required this.transactionType,
     required this.trnxSummary,
     required this.amount,
     required this.amountColorBasedOnTransactionType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

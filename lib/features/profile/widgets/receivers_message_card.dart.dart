@@ -8,11 +8,11 @@ class ReceiversMessageCard extends StatelessWidget {
   final String dateTime;
   final String user;
   const ReceiversMessageCard({
-    Key? key,
+    super.key,
     required this.message,
     required this.dateTime,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

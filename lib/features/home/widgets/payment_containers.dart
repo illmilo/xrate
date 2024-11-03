@@ -11,11 +11,11 @@ class PaymentContainers extends StatelessWidget {
   final Color color;
   final String text;
   const PaymentContainers({
-    Key? key,
+    super.key,
     required this.icon,
     required this.color,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

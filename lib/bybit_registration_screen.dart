@@ -4,18 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:money_transfer/privacy_policy_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart'
-    as onboarding_screen;
-import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:money_transfer/core/utils/color_constants.dart';
 import 'package:money_transfer/core/utils/global_constants.dart';
 import 'package:money_transfer/core/utils/assets.dart';
-import 'package:money_transfer/features/auth/screens/signup_screen.dart';
 import 'package:money_transfer/features/onboarding/screens/widgets/glassmorphic_card.dart';
-import 'package:money_transfer/widgets/custom_button.dart';
 import 'package:money_transfer/widgets/height_space.dart';
-import 'package:money_transfer/bybit_registration_screen.dart';
 
 enum PageState {
   loading,
@@ -31,7 +24,7 @@ enum PageState {
 
 class BybitRegistrationScreen extends StatefulWidget {
   static const route = '/bybit-registration';
-  const BybitRegistrationScreen({Key? key}) : super(key: key);
+  const BybitRegistrationScreen({super.key});
 
   @override
   State<BybitRegistrationScreen> createState() =>

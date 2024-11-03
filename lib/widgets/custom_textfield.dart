@@ -19,7 +19,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
   const CustomTextField({
-    Key? key,
+    super.key,
     this.labelText = "",
     required this.hintText,
     required this.controller,
@@ -34,7 +34,7 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
     this.willContainPrefix = false,
     this.inputFormatters,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

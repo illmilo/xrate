@@ -10,7 +10,6 @@ import 'package:money_transfer/config/routes/custom_push_navigators.dart';
 import 'package:money_transfer/core/error/error_handler.dart';
 import 'package:money_transfer/core/utils/global_constants.dart';
 import 'package:money_transfer/core/utils/utils.dart';
-import 'package:money_transfer/features/onboarding/screens/onboarding_screen.dart';
 import 'package:money_transfer/features/profile/models/message_model.dart';
 import 'package:money_transfer/features/profile/providers/chat_provider.dart';
 import 'package:money_transfer/features/profile/screens/chat_screen.dart';

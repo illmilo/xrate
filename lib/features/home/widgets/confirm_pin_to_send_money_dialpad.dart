@@ -17,9 +17,9 @@ import 'package:money_transfer/widgets/pin_input_field.dart';
 class ConfirmPinToSendMoneyDialPad extends StatefulWidget {
   final VoidCallback onSuccess;
   const ConfirmPinToSendMoneyDialPad({
-    Key? key,
+    super.key,
     required this.onSuccess,
-  }) : super(key: key);
+  });
 
   @override
   State<ConfirmPinToSendMoneyDialPad> createState() =>
@@ -169,7 +169,7 @@ class _ConfirmPinToSendMoneyDialPadState
                   children: [
                     TextButton(
                       style: ButtonStyle(
-                        fixedSize: MaterialStatePropertyAll(
+                        fixedSize: WidgetStatePropertyAll(
                           Size(heightValue75, heightValue75),
                         ),
                       ),
@@ -184,7 +184,7 @@ class _ConfirmPinToSendMoneyDialPadState
                     ),
                     TextButton(
                       style: ButtonStyle(
-                        fixedSize: MaterialStatePropertyAll(
+                        fixedSize: WidgetStatePropertyAll(
                           Size(heightValue75, heightValue75),
                         ),
                       ),

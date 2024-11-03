@@ -36,10 +36,10 @@ class CurrencyService {
 
   ///Returns a list with all the currencies that mach the given codes list.
   List<Currency> findCurrenciesByCode(List<String> codes) {
-    final List<String> _codes =
+    final List<String> codes0 =
         codes.map((code) => code.toUpperCase()).toList();
     final List<Currency> currencies = [];
-    for (final code in _codes) {
+    for (final code in codes0) {
       final Currency? currency = findByCode(code);
       if (currency != null) {
         currencies.add(currency);
