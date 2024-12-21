@@ -1,5 +1,6 @@
 const contactLessIcon = "assets/icons/contactless_icon.png";
 const addIcon = "assets/icons/add_icon.png";
+const addAlert = "assets/icons/alert_icon.png";
 const sendIcon = "assets/icons/send_icon.png";
 const mobileIcon = "assets/icons/mobile_icon.png";
 const budgetIcon = "assets/icons/budget_icon.png";

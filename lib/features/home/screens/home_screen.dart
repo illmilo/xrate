@@ -111,6 +111,65 @@ class _HomeScreenState extends State<HomeScreen> {
   String cur1 = '🇺🇸 USD';
   String cur2 = "🇳🇬 NGN";
 
+  void createAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Create an alert"),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // condition dropdown
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(labelText: "Condition"),
+                      items: [
+                        DropdownMenuItem(value: "≥", child: Text("≥")),
+                        DropdownMenuItem(value: "≤", child: Text("≤")),
+                      ],
+                      onChanged: (value) {}
+                  ),
+                  SizedBox(height: 16),
+                  // rate number input
+                  TextField(
+                    decoration: InputDecoration(
+                        labelText: "Rate", hintText: "1644.12"
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 16),
+                  // notifications
+                  Text("Notifications", style: TextStyle(fontWeight: FontWeight.bold)),
+                  CheckboxListTile(
+                    title: Text("E-mail"),
+                    value: false,
+                    onChanged: (value) {},
+                  ),
+                  CheckboxListTile(
+                    title: Text(
+                        "App notifications"),
+                    value: false,
+                    onChanged: (value) {},
+                  ),
+                ],
+              )
+            ),
+              actions: [
+              TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+              ),
+              ElevatedButton(
+              onPressed: () {},
+              child: Text("Create"),
+              ),
+            ],
+          );
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
@@ -142,15 +201,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     // backgroundColor: whiteColor,
                                     backgroundImage:
                                         const AssetImage(gradientCircle),
-                                    child: Center(
-                                        child: Text(
-                                      user.fullname[0],
-                                          // 'Test',
-                                      style: TextStyle(
-                                          color: secondaryAppColor,
-                                          fontSize: heightValue25,
-                                          fontWeight: FontWeight.bold),
-                                    )),
+                                    // child: Center(
+                                    //     child: Text(
+                                    //   // user.fullname[0],
+                                    //   style: TextStyle(
+                                    //       color: secondaryAppColor,
+                                    //       fontSize: heightValue25,
+                                    //       fontWeight: FontWeight.bold),
+                                    // )),
                                   ),
                                   SizedBox(
                                     width: value10,
@@ -226,8 +284,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           AddSendFundsContainers(
                             text: "Alert",
-                            icon: addIcon,
-                            onTap: () => namedNav(context, "/add-money"),
+                            icon: addAlert,
+                            onTap: () => createAlert(context),
                           ),
                         ],
                       ),
