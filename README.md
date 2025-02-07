@@ -1,70 +1,41 @@
-# Pay Mobile - P2P Money Transfer App
+<img align="right" width="75px" src="assets/images/main_logo.png">
 
-<img src="assets/images/pay_mobile_advert.png" alt="Pay Mobile" title="Pay Mobile">
+# XRate
+Exchange rates & P2P money transfer Android app.
 
-# Features (Don't forget to give it a star 🌟
+---
+[//]: # (## You can perform some actions with the <a href="https://github.com/adedayoniyi/Pay-Mobile-Web-Admin"> Pay Mobile Web Admin </a>)
+## Features
+1. Additional security with pin authorization
+2. Push and in-app notifications
+3. Customer service support 
+4. Responsive design
+5. Safe XRate account creation and maintenance
 
-## You can perform some actions with the <a href="https://github.com/adedayoniyi/Pay-Mobile-Web-Admin"> Pay Mobile Web Admin </a>
+## Usage
 
-#### 1. Pin feature used for authorizing transactions and user login
+[//]: # (#### Visit:<a href="https://github.com/adedayoniyi/Pay-Mobile-Full-Stack"> Pay Mobile Full Stack </a> to access the full stack code of the software &#40;i.e the Back End and the Web Admin Front End&#41;)
 
-<img src="assets/images/pin_feature_showcase.png" alt="In app image 1" title="In app image 1" width="260" height="563">
+- View current exchange rates 
+- Transfer money with one tap
+- View transaction details 
+- Create rate alerts
 
-##### 2. Custom in-app notifications
+## Installation
 
-<img src="assets/images/in_app_notification_image.png" alt="In app image 2" title="In app image 2" width="260" height="563">
-
-##### 3. Push notifications for transfers
-
-<img src="assets/images/push_notification_showcase.png" alt="In app image 3" title="In app image 3" width="260" height="563">
-
-##### 4. In-app customer service support
-
-<img src="assets/images/customer_support_showcase.png" alt="In app image 4" title="In app image 4" width="260" height="563">
-
-##### 5. Success Dialogs
-
-<img src="assets/images/success_dialogs_showcase.png" alt="In app image 5" title="In app image 5" width="260" height="563">
-
-##### 6. Fully responsive(Tablet View)
-
-<img src="assets/images/responsive_showcase.png" alt="In app image 6" title="In app image 6" height="563">
-
-## New App Features 🌟
-
-#### 1. Sign Up Verification
-
-<img src="assets/images/signup_verification_showcase.png" alt="In app image 1" title="Sign Up Verification Image" width="260" height="563">
-
-#### 2. Forgort Password
-
-<img src="assets/images/forgort_password_showcase.png" alt="In app image 1" title="Forgort password Image" width="260" height="563">
-
-### QUICK START ⚡
-
-#### Visit:<a href="https://github.com/adedayoniyi/Pay-Mobile-Full-Stack"> Pay Mobile Full Stack </a> to access the full stack code of the software (i.e the Back End and the Web Admin Front End)
-
-### Note: The server running this app has already been deployed to render.com, which means you can immediately clone this repo, run it and start using it (i.e The backend is already connected).
-
-#### Since every username on the app is unique, transfers are performed with usernames. Just enter the `@username` of the user and you can easily transfer funds
-
-<img src="assets/images/username_transfer_showcase.png" alt="Username Transfer Showcase" title="In app image 3" width="260" height="563">
-
-#### After the username is found then transfers can be made
-
-<img src="assets/images/username_search_success_showcase.png" alt="Username Transfer Showcase" title="Username Transfer Showcase" width="260" height="563">
-
-#### Then tap the transaction to view its details
-
-<img src="assets/images/transaction_details_showcase.png" alt="Username Transfer Showcase" title="Username Transfer Showcase" width="260" height="563">
-
-#### After cloning don't forget to run:
-
+1. Clone repo
+2. Install dependencies
 ```bash
 flutter pub get
 ```
+3. Configure the server (optionally)
+4. Locate to `lib/core/utils/global_constants.dart` and link the project to your server (optionally)
+```dart
+const String uri = "your_uri_address";
+```
+5. Run `main.dart`
 
-## Packages Used 📦
+## Dependencies
 
 1. <a href="https://pub.dev/packages?q=provider">provider</a>
 2. <a href="https://pub.dev/packages/shared_preferences">shared_preferences</a>
@@ -79,8 +50,7 @@ flutter pub get
 10. <a href="https://pub.dev/packages/socket_io_client">socket_io_client</a>
 11. <a href="https://pub.dev/packages/awesome_notifications">awesome_notifications</a>
 
-#### Here are some test login details of verified users if you don't want to create an account
-
+### Test Login
 ```json
 [
   {
@@ -106,36 +76,15 @@ flutter pub get
 ]
 ```
 
-### If you choose to run it on your own server, visit the Pay Mobile Server Repo
+[//]: # (## This is the official Nodejs server code that this app is running on <a href="https://github.com/adedayoniyi/Pay-Mobile-Server">Pay Mobile Server</a>)
 
-## This is the official Nodejs server code that this app is running on <a href="https://github.com/adedayoniyi/Pay-Mobile-Server">Pay Mobile Server</a>
+## Contribution
 
-## Important
-
-### After you are done with configuring the server, dont forget to update the uri in the global_constants.dart file
-
-1. Locate lib\core\utils\global_constants.dart and edit line 6 using the server URL you generated or created. Changes will apply globally. Check Below:
-
-```dart
-6. const String uri = "https://transfer-dayo-niyi.onrender.com";
-```
-
-To
-
-```dart
-6. const String uri = "Your server URL";
-```
-
-## That's All 🎉🎉🎉
-
-## Contributing
-
-Pull requests are welcome. If you encounter any problem with the app or server, you can open an issue.
-
-##### If you liked this project, don't forget to leave a star 🌟.
-
-##### Note: As of now, no tests are available
+Pull requests are welcome. If you encounter any problem with the app or server, you can open an 
+issue. This project was forked from 
+[here](https://github.com/adedayoniyi/Pay-Mobile-P2P-Money-Transfer-App),
+globally modified and made into an independent project under the limitations of MIT License.
 
 ## License
 
-This project is licensed under the MIT License - see the <a href="https://github.com/adedayoniyi/Pay-Mobile-P2P-Money-Transfer-App/blob/main/LICENSE.md">LICENSE</a> file for details.
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.

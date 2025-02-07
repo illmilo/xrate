@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 import 'package:money_transfer/privacy_policy_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:money_transfer/core/utils/color_constants.dart';
@@ -9,6 +11,8 @@ import 'package:money_transfer/core/utils/global_constants.dart';
 import 'package:money_transfer/core/utils/assets.dart';
 import 'package:money_transfer/features/onboarding/screens/widgets/glassmorphic_card.dart';
 import 'package:money_transfer/widgets/height_space.dart';
+// create route to home screen
+import 'package:money_transfer/features/home/screens/home_screen.dart';
 
 enum PageState {
   loading,
@@ -50,13 +54,6 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen>
   late Animation<Color?> _colorAnimation;
   bool _isButtonClickable = false;
   bool visibility = true;
-
-  // List of currencies
-  List<String> currencies = ['NGN', 'RUB', 'USD', 'EUR', 'GBP', 'JPY'];
-  String fromCurrency = 'NGN';
-  String toCurrency = 'RUB';
-  double conversionRate = 0.25; // Example conversion rate from NGN to RUB
-  TextEditingController amountController = TextEditingController();
 
   @override
   void initState() {
@@ -100,7 +97,7 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen>
           // WebView and overlays as before
           InAppWebView(
             initialUrlRequest: URLRequest(
-              url: WebUri.uri(Uri.parse('https://www.bybit.com/en/register')),
+              url: WebUri.uri(Uri.parse('https://www.bybit.com/en/login')),
             ),
             onWebViewCreated: (InAppWebViewController controller) {
               _controller = controller;
@@ -238,120 +235,6 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen>
               ],
             ),
           ),
-
-          // Currency exchange UI
-          Visibility(
-            visible: !_isWebViewVisible && !_areOverlaysVisible,
-            child: Container(
-              color: Colors.white
-                  .withOpacity(0.3), // Background color for the exchange UI
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Currency amount input
-                  TextField(
-                    controller: amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Amount in $fromCurrency',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Dropdowns for selecting currencies
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // From currency dropdown
-                      Expanded(
-                        child: DropdownButton<String>(
-                          value: fromCurrency,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              fromCurrency = newValue!;
-                            });
-                          },
-                          items: currencies
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // Swap button to switch between currencies
-                      IconButton(
-                        icon: const Icon(Icons.swap_horiz),
-                        onPressed: () {
-                          setState(() {
-                            String temp = fromCurrency;
-                            fromCurrency = toCurrency;
-                            toCurrency = temp;
-                          });
-                        },
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // To currency dropdown
-                      Expanded(
-                        child: DropdownButton<String>(
-                          value: toCurrency,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              toCurrency = newValue!;
-                            });
-                          },
-                          items: currencies
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Display conversion result
-                  ElevatedButton(
-                    onPressed: () {
-                      double amount =
-                          double.tryParse(amountController.text) ?? 0;
-                      double convertedAmount = amount * conversionRate;
-
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Conversion Result'),
-                          content: Text(
-                              '$amount $fromCurrency = $convertedAmount $toCurrency at a rate of $conversionRate'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: const Text('Convert'),
-                  ),
-                ],
-              ),
-            ),
-          )
         ],
       ),
     );
@@ -426,7 +309,8 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen>
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: value10), // Adjust padding as needed
                         child: Text(
-                          "Upon clicking Continue, you will be directed to either log in or sign up to access their Bybit account.",
+                          "Upon clicking Continue, you agree to be redirected "
+                              "and authorized in a third party service (ByBit)",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: heightValue18,
@@ -528,11 +412,14 @@ class _BybitRegistrationScreenState extends State<BybitRegistrationScreen>
   Future<void> _handlePageLoad(InAppWebViewController controller) async {
     Uri? currentUrl = await controller.getUrl();
 
+    /* when the user passed logging in / registering, redirect to
+    * home screen */
     if (currentUrl
         .toString()
         .contains('www.bybit.com/fiat/trade/otc?actionType')) {
       // for p2p page
-      print("Go to home");
+      print("Redirecting to HomeScreen…");
+      if (mounted) Navigator.pushReplacementNamed(context, HomeScreen.route);
     } else if (currentUrl.toString().contains('security')) {
       setState(() {
         _currentPageState = PageState.securityPage;

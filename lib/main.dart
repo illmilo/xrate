@@ -58,17 +58,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(), // Replace with your theme manager if needed
+      theme: ThemeData.light(),
       debugShowCheckedModeBanner: false,
-      // home: HomeScreen(),
+      initialRoute: BybitRegistrationScreen.route, // Set the initial route
       routes: {
         HomeScreen.route: (context) => const HomeScreen(),
         BybitRegistrationScreen.route: (context) => const BybitRegistrationScreen(),
-        PrivacyPolicyScreen.route: (context) => const PrivacyPolicyScreen(),
-        // we can add other routes as needed
       },
-      // initialRoute: HomeScreen.route,
-      initialRoute: BybitRegistrationScreen.route, // Set the initial route
     );
   }
 }

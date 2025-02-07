@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 import 'package:flutter/material.dart';
 import 'package:money_transfer/config/routes/custom_push_navigators.dart';
 import 'package:money_transfer/core/utils/assets.dart';
@@ -17,7 +19,7 @@ import 'package:money_transfer/features/home/services/home_service.dart';
 import 'package:money_transfer/features/transactions/screens/transaction_details_screen.dart';
 import 'package:money_transfer/features/transactions/widgets/transactions_card.dart';
 import 'package:money_transfer/features/transactions/models/transactions.dart';
-import 'package:money_transfer/features/auth/providers/user_provider.dart';
+// import 'package:money_transfer/features/auth/providers/user_provider.dart';
 import 'package:money_transfer/widgets/circular_loader.dart';
 import 'package:money_transfer/widgets/custom_button.dart';
 
@@ -34,11 +36,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeService homeService = HomeService();  // device notifications
   final AuthService authService = AuthService();
-  int? balance = 0;
-  String naira = '';
   List<Transactions> transactions = [];
   late Future _future;
   final ScrollController scrollController = ScrollController();
+
+  // prepare string to fetch data from bybit
+  String bybitUsername = "";
 
   getAllTransactions() async {
     transactions = await homeService.getAllTransactions(
@@ -76,12 +79,37 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
+    fetchBybitUsername();
+
     // checkIfUserHasPin();
     obtainTokenAndUserData();
     _future = getAllTransactions();
     Future.delayed(const Duration(seconds: 5), () {
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
     });
+  }
+
+  // parsing username headlessly with built-in webViewController
+  Future<void> fetchBybitUsername() async {
+    try {
+      final browser = HeadlessInAppWebView(
+        initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse("https://www.bybit.com"))),
+        onLoadStop: (controller, url) async {
+          String? username = await controller.evaluateJavascript(
+            source: "document.querySelector('.user-info-selector')?.innerText;",
+          );
+          if (username != null && username.isNotEmpty) {
+            setState(() {
+              bybitUsername = username;
+            });
+          }
+        },
+      );
+      print("Updated bybitUsername: $bybitUsername");
+      await browser.run();
+    } catch (e) {
+      print('Error parsing Bybit username: \$e');
+    }
   }
 
   @override
@@ -107,9 +135,111 @@ class _HomeScreenState extends State<HomeScreen> {
     "More",
   ];
 
-  double exchangeRate = 1644.39;
-  String cur1 = '🇺🇸 USD';
-  String cur2 = "🇳🇬 NGN";
+  // currency exchange UI
+
+  List<String> currencies = ['NGN', 'RUB', 'USD', 'EUR', 'GBP', 'JPY'];
+  String fromCurrency = 'NGN';
+  String toCurrency = 'RUB';
+  double conversionRate = 0.25; // Example conversion rate from NGN to RUB
+  TextEditingController amountController = TextEditingController();
+
+  void showCurrencyConverter(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            title: Text('Currency Converter'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: amountController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Amount in \$fromCurrency',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton<String>(
+                      value: fromCurrency,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          fromCurrency = newValue!;
+                        });
+                      },
+                      items: currencies.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.swap_horiz),
+                      onPressed: () {
+                        setState(() {
+                          String temp = fromCurrency;
+                          fromCurrency = toCurrency;
+                          toCurrency = temp;
+                        });
+                      },
+                    ),
+                    DropdownButton<String>(
+                      value: toCurrency,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          toCurrency = newValue!;
+                        });
+                      },
+                      items: currencies.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: () {
+                    double amount = double.tryParse(amountController.text) ?? 0;
+                    double convertedAmount = amount * conversionRate;
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AlertDialog(
+                            title: const Text('Conversion Result'),
+                            content: Text(
+                                '$amount \$fromCurrency = $convertedAmount \$toCurrency at a rate of $conversionRate'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                  child: const Text('Convert'),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+    );
+  }
 
   void createAlert(BuildContext context) {
     showDialog(
@@ -172,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+    // final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       backgroundColor: scaffoldBackgroundColor,
       body: SafeArea(
@@ -198,17 +328,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   CircleAvatar(
                                     radius: heightValue25,
-                                    // backgroundColor: whiteColor,
+                                    backgroundColor: whiteColor,
                                     backgroundImage:
                                         const AssetImage(gradientCircle),
-                                    // child: Center(
-                                    //     child: Text(
-                                    //   // user.fullname[0],
-                                    //   style: TextStyle(
-                                    //       color: secondaryAppColor,
-                                    //       fontSize: heightValue25,
-                                    //       fontWeight: FontWeight.bold),
-                                    // )),
+                                    child: Center(
+                                        child: Text(
+                                      bybitUsername,
+                                      style: TextStyle(
+                                          color: secondaryAppColor,
+                                          fontSize: heightValue25,
+                                          fontWeight: FontWeight.bold),
+                                    )),
                                   ),
                                   SizedBox(
                                     width: value10,
@@ -218,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Hi, ${user.fullname}",
+                                        "Hi, ${bybitUsername}",
                                         style: TextStyle(
                                           color: whiteColor,
                                           fontSize: heightValue18,
@@ -226,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       Text(
-                                        "@ ${user.username}",
+                                        "@ ${bybitUsername}",
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: whiteColor,
@@ -253,22 +383,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               // first dropdown
                               ElevatedButton(
-                                onPressed: (){},
-                                child: Text(cur1, style: TextStyle(fontSize: 18)),
+                                onPressed: () => showCurrencyConverter(context),
+                                child: Text("Currency exchange", style: TextStyle(fontSize: 18)),
                               ),
-                              ElevatedButton(onPressed: (){},
-                                  child: Text('⇌', style: TextStyle(fontSize: 20))),
-                              ElevatedButton(onPressed: (){}, child: Text(cur2, style: TextStyle(fontSize: 18)))
                             ],
-                          ),
-                          Text(
-                            '1 $cur1 = ${exchangeRate.toStringAsFixed(2)} $cur2',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w900,
-                            ),
                           ),
                           Center(child: LineChartSample()),
                         ],
